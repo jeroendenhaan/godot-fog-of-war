@@ -1,0 +1,28 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 fog_color : hint_color = vec4(1.0);
+uniform float fog_transparency;
+
+// Shader reads sprite's texture (consisting of black, white and shades of gray).
+// Sets pixel color to fog_color parameter and makes pixels transparent based
+// on the pixels grayscale value (actually the red channel).
+//
+// Base transarency parameter can be used to make fog slightly transparent,
+// which is useful during development sometimes.
+
+void fragment() {
+	
+	vec4 test_color = texture(TEXTURE, UV);
+	vec4 out_color = fog_color;
+	out_color.a = max(0.0, 1.0 - test_color.r - fog_transparency);
+	COLOR = out_color;
+	
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/fog_color = Color( 0.137255, 0.137255, 0.137255, 1 )
+shader_param/fog_transparency = null
